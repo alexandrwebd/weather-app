@@ -1,0 +1,35 @@
+.WeatherItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  width: 64px;
+  height: 110px;
+  margin-bottom: 110px;
+  margin-left: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+.WeatherTime {
+  margin-bottom: 10px;
+}
+.WeatherImg {
+  height: 40px;
+}
+.WeatherImg img {
+  max-width: 100%;
+  object-fit: cover;
+}
+.WeatherGradus {
+  margin-bottom: 0;
+  position: relative;
+}
+.WeatherGradus::after {
+  position: absolute;
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  border: 1px solid #828282;
+}
