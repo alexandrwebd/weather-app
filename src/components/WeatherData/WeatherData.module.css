@@ -17,7 +17,7 @@
   text-transform: uppercase;
   font-weight: 500;
   font-size: 20px;
-  margin-bottom: 130px;
+  margin-bottom: 100px;
 }
 .WeatherGradusWrapper {
   display: flex;
@@ -31,6 +31,7 @@
   margin-right: auto;
   position: relative;
   height: 5px;
+  margin-bottom: 35px;
 }
 .WeatherGradus::after,
 .WeatherGradus::before {
@@ -42,7 +43,7 @@
   height: 10px;
   border-radius: 50%;
   border: 1px solid #828282;
-  left: 25px;
+  left: 49px;
   top: 0;
 }
 .WeatherGradus::before {

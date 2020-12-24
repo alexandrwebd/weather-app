@@ -5,8 +5,9 @@ const Search = (props) => {
   return (
     <input
       className={classes.Search}
-      type="text"
       placeholder={'Введите город'}
+      onChange={props.searchChanget}
+      value={props.value}
     />
   )
 }
