@@ -10,7 +10,7 @@ class Weather extends Component {
     this.state = {
       apiKey: '3973ec5b6aabb9ef7cef4218ddfc3c41',
       cityId: '703448',
-      cityName: 'Чернигов',
+      cityName: '',
       data: [],
       isLoaded: false,
       error: null,
@@ -18,68 +18,16 @@ class Weather extends Component {
       temp: '',
       description: '',
       icons: null,
-      weatherList: [
-        { time: 9, icons: '', temperature: 2, id: 1 },
-        { time: 12, icons: '', temperature: 5, id: 2 },
-        { time: 15, icons: '', temperature: 7, id: 3 },
-        { time: 18, icons: '', temperature: 10, id: 4 },
-      ],
+      weatherList: [],
     }
-  }
-
-  componentDidMount() {
-    this.fetchData()
-  }
-
-  getWeatherList(data) {
-    // список иконок погоды
-    const weathers = [...this.state.weatherList]
-    weathers.push({
-      time: 9,
-      icons: `<img src="http://openweathermap.org/img/w/${data.weather[0]['icon']}.png" alt="weather" />`,
-      id: 1,
-    })
-    this.setState((state) => ({
-      weathers,
-    }))
-  }
-
-  fetchData() {
-    return fetch(
-      `http://api.openweathermap.org/data/2.5/weather?q=${this.state.cityName}&appid=${this.state.apiKey}`
-    )
-      .then((respons) => respons.json())
-      .then((data) => {
-        console.log(data)
-        this.setState({
-          data: data,
-          temp: Math.round(data.main.temp - 273),
-          description: data.weather[0]['description'],
-          isLoadet: true,
-        })
-
-        this.getWeatherList()
-        // this.state.weatherList.map((item, index) => {
-        //   this.setState({
-        //     time: 9,
-        //     icons: `<img src="http://openweathermap.org/img/w/${data.weather[0]['icon']}.png" alt="weather" />`,
-        //     temperature: this.state.temp,
-        //     id: index,
-        //   })
-        // })
-      })
-      .catch((error) => {
-        console.log(error)
-        this.setState({
-          isLoader: true,
-          error,
-        })
-      })
   }
 
   searchHahdler = () => {
     if (this.state.inputVal !== '') {
-      this.setState({ cityName: this.state.inputVal })
+      this.setState({
+        cityName: this.state.inputVal,
+        isLoaded: false,
+      })
     }
     this.render()
   }
@@ -87,8 +35,96 @@ class Weather extends Component {
     this.setState({ inputVal: e.target.value })
   }
 
+  componentDidMount() {
+    this.fetchData()
+  }
+  componentDidUpdate() {
+    if (this.state.cityName !== '' && !this.state.isLoaded) {
+      fetch(
+        `http://api.openweathermap.org/data/2.5/weather?q=${this.state.cityName}&appid=${this.state.apiKey}`
+      )
+        .then((respons) => respons.json())
+        .then((data) => {
+          if (data) {
+            this.setState({
+              temp: Math.round(data.main.temp - 273),
+              description: data.weather[0]['description'],
+              isLoaded: true,
+              inputVal: '',
+            })
+
+            this.getWeatherList(data)
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          this.setState({
+            isLoaded: true,
+            error,
+          })
+        })
+    }
+  }
+
+  // правильное обновление сложного стейта
+  getWeatherList(data) {
+    // список иконок погоды
+
+    this.setState((state) => {
+      return {
+        weatherList: [
+          {
+            time: 9,
+            icons: `http://openweathermap.org/img/w/${data.weather[0]['icon']}.png`,
+            temperature: Math.round(data.main.temp - 273),
+            id: 1,
+          },
+          {
+            time: 12,
+            icons: `http://openweathermap.org/img/w/${data.weather[0]['icon']}.png`,
+            temperature: Math.round(data.main.temp - 273),
+            id: 2,
+          },
+          {
+            time: 18,
+            icons: `http://openweathermap.org/img/w/${data.weather[0]['icon']}.png`,
+            temperature: Math.round(data.main.temp - 273),
+            id: 3,
+          },
+        ],
+      }
+    })
+  }
+
+  fetchData() {
+    if (this.state.cityName !== '') {
+      return fetch(
+        `http://api.openweathermap.org/data/2.5/weather?q=${this.state.cityName}&appid=${this.state.apiKey}`
+      )
+        .then((respons) => respons.json())
+        .then((data) => {
+          this.setState({
+            data: data,
+            temp: Math.round(data.main.temp - 273),
+            description: data.weather[0]['description'],
+            isLoaded: true,
+          })
+
+          this.getWeatherList(data)
+        })
+        .catch((error) => {
+          console.log(error)
+          this.setState({
+            isLoaded: true,
+            error,
+          })
+        })
+    } else {
+      return null
+    }
+  }
+
   render() {
-    const { error, isLoaded, data } = this.state
     return (
       <div className={classes.Weather}>
         <div className={classes.WeatherSearch}>

@@ -33,6 +33,11 @@
   height: 5px;
   margin-bottom: 35px;
 }
+
+.activeGradus {
+  position: relative;
+}
+
 .WeatherGradus::after,
 .WeatherGradus::before {
   content: '';
@@ -43,7 +48,7 @@
   height: 10px;
   border-radius: 50%;
   border: 1px solid #828282;
-  left: 49px;
+  left: 80%;
   top: 0;
 }
 .WeatherGradus::before {
