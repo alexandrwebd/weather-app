@@ -32,10 +32,11 @@
   position: relative;
   height: 5px;
   margin-bottom: 35px;
+  display: none;
 }
 
 .activeGradus {
-  position: relative;
+  display: block;
 }
 
 .WeatherGradus::after,
